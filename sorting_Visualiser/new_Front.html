@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sorting Visualizer</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    @keyframes text-fade-in {
+      0% { opacity: 0; transform: translateY(30px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in {
+      animation: text-fade-in 1.5s ease-out forwards;
+    }
+    
+  </style>
+</head>
+<body class="bg-gray-900 text-white font-sans">
+  <!-- Landing Section -->
+  <section class="h-screen flex flex-col justify-center items-center relative overflow-hidden">
+    <!-- Background Video -->
+    <video autoplay muted loop class="absolute inset-0 w-full h-full object-cover z-0">
+      <source src="Screen Recording 2025-04-15 114603 (online-video-cutter.com) (2).mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+
+    <!-- Overlay -->
+    <div class="absolute inset-0 bg-black opacity-50 z-0"></div>
+
+    <!-- Animated Text -->
+    <h1 class="text-5xl md:text-7xl font-bold z-10" style="position: absolute; top: 0; left: 0; padding: 10px;">
+        <span id="typing-text"></span>
+      </h1>
+      
+   
+  </section>
+
+  <!-- Sorting Algorithms Section -->
+  <section class="py-20 bg-gray-800 grid grid-cols-1 md:grid-cols-3 gap-8 px-6 md:px-20" id="algorithm-section">
+    <!-- JavaScript will insert cards here -->
+  </section>
+
+  <script>
+    const sortingAlgorithms = [
+      "Bubble Sort",
+      "Selection Sort",
+      "Insertion Sort",
+      "Merge Sort",
+      "Quick Sort",
+      "Heap Sort",
+      "Count Sort",
+      "Radix Sort",
+      "Bucket Sort",
+      "Jump Sort",
+    ];
+
+    const container = document.getElementById('algorithm-section');
+
+    sortingAlgorithms.forEach((algo, idx) => {
+      const card = document.createElement('div');
+      card.className = "bg-gray-700 rounded-2xl shadow-2xl p-10 min-h-52 hover:bg-gray-600 cursor-pointer transition duration-300";
+
+      card.innerHTML = `
+        <h2 class="text-2xl font-semibold mb-2">${algo}</h2>
+        <p class="text-gray-300">Visualize how ${algo} sorts an array step-by-step.</p>
+      `;
+      container.appendChild(card);
+    });
+  </script>
+  <script>
+    const text = "Sorting Visualizer";
+    const target = document.getElementById("typing-text");
+  
+    let index = 0;
+    let forward = true;
+  
+    function typeEffect() {
+      if (forward) {
+        if (index <= text.length) {
+          target.innerText = text.slice(0, index++);
+        } else {
+          forward = false;
+          setTimeout(typeEffect, 1000); // pause before backspacing
+          return;
+        }
+      } else {
+        if (index >= 0) {
+          target.innerText = text.slice(0, index--);
+        } else {
+          forward = true;
+        }
+      }
+      setTimeout(typeEffect, 150);
+    }
+  
+    // Start the typing animation on load
+    window.onload = typeEffect;
+  </script>
+  <div class="bg-gray-700 rounded-2xl shadow-2xl p-10 min-h-52 hover:bg-gray-600 cursor-pointer transition duration-300">
+    <h2 class="text-3xl font-semibold mb-4">Bubble Sort</h2>
+    <p class="text-gray-300">Visualize how Bubble Sort sorts an array step-by-step.</p>
+  </div>
+  
+  
+</body>
+</html>
