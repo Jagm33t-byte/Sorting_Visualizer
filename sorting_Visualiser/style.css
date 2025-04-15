@@ -149,3 +149,41 @@ select#algo-select {
   font-size: 1rem;
   border: 1px solid #ccc;
 }
+
+.control-panel {
+  display: flex;
+  justify-content: center; /* center everything */
+  align-items: flex-start;
+  background: #e3eaf6;
+  padding: 20px 30px;
+  border-radius: 12px;
+  gap: 20px; /* reduced gap between panels */
+  flex-wrap: wrap;
+}
+
+.left-panel,
+.right-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.control-group label {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.right-panel button {
+  padding: 4px 10px;
+  font-size: 13px;
+  border-radius: 6px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.right-panel button:hover {
+  background-color: #2980b9;
+}
