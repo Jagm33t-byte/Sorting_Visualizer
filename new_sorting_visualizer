@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sorting Visualizer</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .main-container {
+            display: flex;
+            flex-wrap: wrap;
+            height: 100vh;
+        }
+        .left-panel {
+            flex: 1;
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            box-sizing: border-box;
+            border-right: 1px solid #ccc;
+        }
+        .controls {
+            margin-bottom: 10px;
+        }
+        .controls .control {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        .controls label {
+            margin-right: 5px;
+            font-weight: bold;
+        }
+        .controls select, .controls input[type="range"] {
+            margin-left: 5px;
+        }
+        .controls .buttons {
+            margin-top: 5px;
+        }
+        .controls button {
+            margin-right: 5px;
+            padding: 5px 10px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+        #visualization {
+            flex: 1;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            height: calc(100% - 150px); /* adjust for controls height */
+            position: relative;
+        }
+        .bar {
+            flex: 1;
+            margin: 0 1px;
+            background-color: #3498db;
+            transition: height 0.2s ease;
+        }
+        .bar.comparing {
+            background-color: #e67e22; /* orange */
+        }
+        .bar.swapping {
+            background-color: #e74c3c; /* red */
+        }
+        .bar.sorted {
+            background-color: #2ecc71; /* green */
+        }
+        .bar.pivot {
+            background-color: #9b59b6; /* purple for pivot in quicksort */
+        }
+        .right-panel {
+            flex: 1;
+            min-width: 300px;
+            padding: 10px;
+            box-sizing: border-box;
+            overflow: auto;
+        }
+        .algorithm-content {
+            display: none;
+        }
+        .algorithm-content.active {
+            display: block;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            overflow: auto;
+        }
+    </style>
+</head>
+<body>
+<div class="main-container">
+    <div class="left-panel">
+        <div class="controls">
+            <div class="control">
+                <label for="algorithm-select">Algorithm:</label>
+                <select id="algorithm-select">
+                    <option value="bubble">Bubble Sort</option>
+                    <option value="selection">Selection Sort</option>
+                    <option value="insertion">Insertion Sort</option>
+                    <option value="merge">Merge Sort</option>
+                    <option value="quick">Quick Sort</option>
+                    <option value="heap">Heap Sort</option>
+                    <option value="count">Count Sort</option>
+                </select>
+            </div>
+            <div class="control">
+                <label for="speed-range">Speed:</label>
+                <input type="range" id="speed-range" min="1" max="100" value="50">
+            </div>
+            <div class="control">
+                <label for="size-range">Size:</label>
+                <input type="range" id="size-range" min="10" max="100" value="50">
+            </div>
+            <div class="buttons control">
+                <button id="generate-btn">Generate</button>
+                <button id="start-btn">Start</button>
+                <button id="pause-btn">Pause</button>
+                <button id="reset-btn">Reset</button>
+            </div>
+        </div>
+        <div id="visualization"></div>
+    </div>
+    <div class="right-panel">
+        <div id="bubble" class="algorithm-content active">
+            <h2>Bubble Sort</h2>
+            <h3>Overview</h3>
+            <p>Bubble Sort is a simple comparison-based algorithm that repeatedly steps through the list, compares adjacent elements and swaps them if they are in the wrong order. This process is repeated until the list is sorted. It is called Bubble Sort because smaller elements "bubble" to the top (beginning) of the list as the algorithm progresses.</p>
+            <h3>Time and Space Complexity</h3>
+            <p>Time Complexity: Worst and Average case are <strong>O(n²)</strong>, Best case (already sorted) is <strong>O(n)</strong> when optimized. Space Complexity: <strong>O(1)</strong> (in-place sorting).</p>
+            <h3>Step-by-Step Explanation</h3>
+            <p>Bubble Sort works by repeatedly iterating through the list. On each pass, it compares adjacent elements and swaps them if needed. After each full pass through the array, the largest element among the unsorted elements settles at its correct final position (end of array). The algorithm repeats passes until no swaps are needed or the array is sorted.</p>
+            <ol>
+                <li>Start at the first element of the array.</li>
+                <li>Compare the current element to the next element. If the current element is greater, swap them.</li>
+                <li>Move to the next element and repeat the comparison and swap if needed.</li>
+                <li>Continue this process to the end of the array. After the first pass, the largest element is at the end.</li>
+                <li>Repeat the above steps for the remaining array (excluding the last sorted elements) until no swaps are needed.</li>
+            </ol>
+            <h3>Code Implementation</h3>
+            <pre><code>
+// JavaScript Bubble Sort (ascending order)
+function bubbleSort(arr) {
+    let n = arr.length;
+    for (let i = 0; i < n - 1; i++) {
+        // After each pass, the largest element among the unsorted portion is placed at the end
+        for (let j = 0; j < n - i - 1; j++) {
+            // If the element is greater than the next, swap them
+            if (arr[j] > arr[j + 1]) {
+                [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+            }
+        }
+    }
+}
+</code></pre>
+            <h3>Suitable Problem Types</h3>
+            <p>Bubble Sort is mainly used for educational purposes to demonstrate sorting. It can be used for very small lists or when simplicity is more important than efficiency. Due to its quadratic time complexity, it is not used for large datasets.</p>
+            <h3>Real-World Application</h3>
+            <p>Bubble Sort is rarely used in production because of its inefficiency on large lists. However, it can be useful in scenarios where the data is nearly sorted (best case) or the list is very small, as it has a simple implementation. Sometimes it is used in teaching to explain basic sorting concepts.</p>
+        </div>
+        <div id="selection" class="algorithm-content">
+            <h2>Selection Sort</h2>
+            <h3>Overview</h3>
+            <p>Selection Sort divides the input list into a sorted and unsorted sublist. It repeatedly selects the minimum (or maximum) element from the unsorted sublist and swaps it with the first element of the unsorted part. This expands the sorted portion by one element each iteration.</p>
+            <h3>Time and Space Complexity</h3>
+            <p>Time Complexity: Worst, Average, and Best case are all <strong>O(n²)</strong> because it always scans the unsorted portion to find the minimum. Space Complexity: <strong>O(1)</strong> (in-place sorting).</p>
+            <h3>Step-by-Step Explanation</h3>
+            <ol>
+                <li>Start with the first element as the current position.</li>
+                <li>Find the minimum element from the unsorted portion (remaining list) and note its index.</li>
+                <li>Swap the minimum element found with the element at the current position.</li>
+                <li>Move the boundary of the sorted sublist by one (the current position increments by one).</li>
+                <li>Repeat the process until the entire list is sorted.</li>
+            </ol>
+            <h3>Code Implementation</h3>
+            <pre><code>
+// JavaScript Selection Sort (ascending order)
+function selectionSort(arr) {
+    let n = arr.length;
+    for (let i = 0; i < n - 1; i++) {
+        // Assume the minimum is the first element
+        let minIndex = i;
+        // Find the minimum element in the unsorted part
+        for (let j = i + 1; j < n; j++) {
+            if (arr[j] < arr[minIndex]) {
+                minIndex = j;
+            }
+        }
+        // Swap if a smaller element was found
+        if (minIndex !== i) {
+            [arr[i], arr[minIndex]] = [arr[minIndex], arr[i]];
+        }
+    }
+}
+</code></pre>
+            <h3>Suitable Problem Types</h3>
+            <p>Selection Sort is generally used when memory writes are costly, since it makes the minimum number of swaps (at most n-1 swaps). However, due to its O(n²) time complexity, it is not efficient for large datasets.</p>
+            <h3>Real-World Application</h3>
+            <p>Selection Sort can be practical for small lists or arrays. It is also useful in embedded systems where memory is limited. Another real-world scenario is when we need to find a few smallest or largest elements (like top-k) with minimal swaps.</p>
+        </div>
+        <div id="insertion" class="algorithm-content">
+            <h2>Insertion Sort</h2>
+            <h3>Overview</h3>
+            <p>Insertion Sort builds the sorted array one element at a time. It takes each element and inserts it into its correct position within the already sorted portion of the array. It is much like how people sort playing cards in their hands.</p>
+            <h3>Time and Space Complexity</h3>
+            <p>Time Complexity: Worst and Average case are <strong>O(n²)</strong> (when elements are in reverse order), Best case is <strong>O(n)</strong> (when array is already mostly sorted). Space Complexity: <strong>O(1)</strong> (in-place sorting).</p>
+            <h3>Step-by-Step Explanation</h3>
+            <ol>
+                <li>Start with the second element (index 1) as the key, considering the first element as a sorted sublist.</li>
+                <li>Compare the key element with the elements in the sorted sublist (from right to left) to find its correct position.</li>
+                <li>Shift elements that are greater than the key to one position ahead to make room for the key.</li>
+                <li>Insert the key into its correct position.</li>
+                <li>Move to the next element and repeat until the whole array is sorted.</li>
+            </ol>
+            <h3>Code Implementation</h3>
+            <pre><code>
+// JavaScript Insertion Sort (ascending order)
+function insertionSort(arr) {
+    let n = arr.length;
+    for (let i = 1; i < n; i++) {
+        let key = arr[i];
+        let j = i - 1;
+        // Move elements of arr[0..i-1] that are greater than key to one position ahead
+        while (j >= 0 && arr[j] > key) {
+            arr[j + 1] = arr[j];
+            j = j - 1;
+        }
+        // Place the key in its correct location
+        arr[j + 1] = key;
+    }
+}
+</code></pre>
+            <h3>Suitable Problem Types</h3>
+            <p>Insertion Sort is efficient for small or mostly sorted datasets. It is often used in practice for small subarrays in efficient sorting algorithms (like TimSort). It's also useful when sorting a list as it is received (online sorting).</p>
+            <h3>Real-World Application</h3>
+            <p>Insertion Sort is used in real-time systems or online algorithms where data arrives one item at a time. An example is sorting playing cards or lists that grow dynamically, where you insert new elements into the already-sorted set.</p>
+        </div>
+        <div id="merge" class="algorithm-content">
+            <h2>Merge Sort</h2>
+            <h3>Overview</h3>
+            <p>Merge Sort is a divide-and-conquer algorithm. It divides the list into two roughly equal halves, recursively sorts each half, and then merges the two sorted halves back together. This merging process combines two sorted lists into a single sorted list.</p>
+            <h3>Time and Space Complexity</h3>
+            <p>Time Complexity: Worst, Average, and Best case are all <strong>O(n log n)</strong> since the list is repeatedly divided in half and merged. Space Complexity: <strong>O(n)</strong> due to the temporary arrays used for merging (not in-place).</p>
+            <h3>Step-by-Step Explanation</h3>
+            <ol>
+                <li>Divide the list into two halves until each sublist contains only one element (a list of one element is considered sorted).</li>
+                <li>Recursively sort the left half and the right half.</li>
+                <li>Merge the two sorted halves: repeatedly pick the smaller of the two front elements of each sublist and add it to the merged list.</li>
+                <li>Continue merging until all elements from both halves have been merged into one sorted list.</li>
+            </ol>
+            <h3>Code Implementation</h3>
+            <pre><code>
+// JavaScript Merge Sort (ascending order)
+function mergeSort(arr) {
+    if (arr.length <= 1) {
+        return arr;
+    }
+    const mid = Math.floor(arr.length / 2);
+    const left = mergeSort(arr.slice(0, mid));
+    const right = mergeSort(arr.slice(mid));
+    return merge(left, right);
+}
+function merge(left, right) {
+    const result = [];
+    let i = 0, j = 0;
+    // Merge until one side is empty
+    while (i < left.length && j < right.length) {
+        if (left[i] < right[j]) {
+            result.push(left[i]);
+            i++;
+        } else {
+            result.push(right[j]);
+            j++;
+        }
+    }
+    // Concatenate remaining elements (if any)
+    return result.concat(left.slice(i)).concat(right.slice(j));
+}
+</code></pre>
+            <h3>Suitable Problem Types</h3>
+            <p>Merge Sort is used for sorting linked lists and large arrays. It is suitable for datasets where stability is required or when dealing with large data because of its consistent O(n log n) time. It is also often used in external sorting (sorting data that does not fit into memory) because it accesses data sequentially.</p>
+            <h3>Real-World Application</h3>
+            <p>Merge Sort is used in applications where reliable performance is needed. Examples include sorting large datasets in databases and external sorting algorithms where data is merged from external storage. The standard library sorting for large files or streams often uses merge-based algorithms.</p>
+        </div>
+        <div id="quick" class="algorithm-content">
+            <h2>Quick Sort</h2>
+            <h3>Overview</h3>
+            <p>Quick Sort is another divide-and-conquer algorithm. It selects a 'pivot' element and partitions the array into two halves: elements less than the pivot and elements greater than the pivot. It then recursively sorts the partitions. Although its worst-case time is quadratic, it is highly efficient on average.</p>
+            <h3>Time and Space Complexity</h3>
+            <p>Time Complexity: Average and Best case are <strong>O(n log n)</strong>, Worst case is <strong>O(n²)</strong> (when the smallest or largest element is always chosen as pivot, e.g., already sorted array). Space Complexity: <strong>O(log n)</strong> on average due to recursion (tail recursion can reduce space) and <strong>O(n)</strong> worst-case recursion.</p>
+            <h3>Step-by-Step Explanation</h3>
+            <ol>
+                <li>Select a pivot element from the array (commonly the last or first element).</li>
+                <li>Partition the array: reorder elements so that elements less than the pivot are on the left, and elements greater than the pivot are on the right. The pivot is then in its final position.</li>
+                <li>Recursively apply the above steps to the sub-array of elements with smaller values and separately to the sub-array of elements with greater values.</li>
+            </ol>
+            <h3>Code Implementation</h3>
+            <pre><code>
+// JavaScript Quick Sort (ascending order)
+function quickSort(arr, low = 0, high = arr.length - 1) {
+    if (low < high) {
+        const pi = partition(arr, low, high);
+        quickSort(arr, low, pi - 1);
+        quickSort(arr, pi + 1, high);
+    }
+    return arr;
+}
+function partition(arr, low, high) {
+    const pivot = arr[high];  // choose last element as pivot
+    let i = low - 1;
+    for (let j = low; j < high; j++) {
+        if (arr[j] < pivot) {
+            i++;
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+    }
+    [arr[i + 1], arr[high]] = [arr[high], arr[i + 1]];
+    return i + 1;
+}
+</code></pre>
+            <h3>Suitable Problem Types</h3>
+            <p>Quick Sort is often used for large arrays and is one of the most popular sorting algorithms due to its efficiency on average. It's widely used in libraries and systems. It is also used in selection algorithms (like finding kth smallest) due to its partitioning scheme.</p>
+            <h3>Real-World Application</h3>
+            <p>Quick Sort is commonly implemented in standard libraries (like C++'s std::sort or Java's Arrays.sort for primitives). It is used in applications needing efficient in-memory sorting. It is less suitable for nearly sorted data unless randomized pivots are used to mitigate worst-case.</p>
+        </div>
+        <div id="heap" class="algorithm-content">
+            <h2>Heap Sort</h2>
+            <h3>Overview</h3>
+            <p>Heap Sort uses a binary heap data structure. It first builds a max-heap from the input array, then repeatedly swaps the first element (maximum) with the last unsorted element and reduces the heap size by one, then heapifies the root of the heap. This effectively sorts the array.</p>
+            <h3>Time and Space Complexity</h3>
+            <p>Time Complexity: Worst, Average, and Best case are all <strong>O(n log n)</strong> because building the heap is O(n) and each of the n removals takes O(log n) to heapify. Space Complexity: <strong>O(1)</strong> (in-place sorting) aside from the recursive call stack if implemented recursively (log n).</p>
+            <h3>Step-by-Step Explanation</h3>
+            <ol>
+                <li>Build a max-heap from the input array.</li>
+                <li>Swap the first element (maximum) with the last element of the heap.</li>
+                <li>Reduce the heap size by one (exclude the last element from the heap). The swapped element is now in its correct final position.</li>
+                <li>Heapify the root of the heap to restore the max-heap property.</li>
+                <li>Repeat steps 2-4 until the heap size is 1.</li>
+            </ol>
+            <h3>Code Implementation</h3>
+            <pre><code>
+// JavaScript Heap Sort (ascending order)
+function heapSort(arr) {
+    let n = arr.length;
+    // Build max heap
+    for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
+        heapify(arr, n, i);
+    }
+    // One by one extract elements from heap
+    for (let i = n - 1; i > 0; i--) {
+        // Move current root to end (swap)
+        [arr[0], arr[i]] = [arr[i], arr[0]];
+        // call max heapify on the reduced heap
+        heapify(arr, i, 0);
+    }
+}
+function heapify(arr, size, root) {
+    let largest = root;
+    let left = 2 * root + 1;
+    let right = 2 * root + 2;
+    // If left child is larger than root
+    if (left < size && arr[left] > arr[largest]) {
+        largest = left;
+    }
+    // If right child is larger than current largest
+    if (right < size && arr[right] > arr[largest]) {
+        largest = right;
+    }
+    // If root is not largest, swap with largest and continue heapifying
+    if (largest !== root) {
+        [arr[root], arr[largest]] = [arr[largest], arr[root]];
+        heapify(arr, size, largest);
+    }
+}
+</code></pre>
+            <h3>Suitable Problem Types</h3>
+            <p>Heap Sort is useful when a guaranteed O(n log n) performance is needed and minimal extra memory use is important. It is used in applications requiring priority queues (conceptually) and in selection algorithms (like finding the kth largest element).</p>
+            <h3>Real-World Application</h3>
+            <p>Heap Sort is used in embedded systems and real-time applications where worst-case performance must be guaranteed. It is also used in heapsort-based data structures and when sorting large datasets in-place is necessary without extra memory.</p>
+        </div>
+        <div id="count" class="algorithm-content">
+            <h2>Count Sort</h2>
+            <h3>Overview</h3>
+            <p>Count Sort (Counting Sort) is a non-comparison based sorting algorithm for integers with a known range. It counts the occurrences of each unique value in the input list, then computes the positions of each value in the sorted array. It is only suitable when the range of input values (k) is not significantly larger than the number of elements (n).</p>
+            <h3>Time and Space Complexity</h3>
+            <p>Time Complexity: <strong>O(n + k)</strong>, where n is the number of elements and k is the range of the input values. Space Complexity: <strong>O(n + k)</strong> for the count array and the output array.</p>
+            <h3>Step-by-Step Explanation</h3>
+            <ol>
+                <li>Find the range of input data (minimum and maximum values).</li>
+                <li>Create a count array of size equal to the range of values, initialized to zero.</li>
+                <li>Traverse the input array and count the occurrences of each value by incrementing the corresponding index in the count array.</li>
+                <li>Transform the count array into a prefix sum array to determine the positions of elements in the sorted array.</li>
+                <li>Construct the sorted array by placing each element at its correct position based on the count array.</li>
+            </ol>
+            <h3>Code Implementation</h3>
+            <pre><code>
+// JavaScript Counting Sort (for non-negative integers)
+function countingSort(arr) {
+    if (arr.length === 0) {
+        return arr;
+    }
+    // Find the maximum value in the array
+    const maxVal = Math.max(...arr);
+    const count = new Array(maxVal + 1).fill(0);
+    // Count occurrences
+    for (let num of arr) {
+        count[num]++;
+    }
+    // Accumulate counts
+    for (let i = 1; i <= maxVal; i++) {
+        count[i] += count[i - 1];
+    }
+    const output = new Array(arr.length);
+    // Build the output array
+    for (let i = arr.length - 1; i >= 0; i--) {
+        output[count[arr[i]] - 1] = arr[i];
+        count[arr[i]]--;
+    }
+    return output;
+}
+</code></pre>
+            <h3>Suitable Problem Types</h3>
+            <p>Counting Sort is used for sorting integers or categorical data with a limited range. It is often used as a subroutine in Radix Sort. It is ideal when the input range (k) is not much larger than the number of items (n), making it effectively linear.</p>
+            <h3>Real-World Application</h3>
+            <p>Counting Sort can be used in applications like sorting exam scores, age distributions, or any scenario where data consists of integers within a known range. It is also used in scenarios like histogram equalization in image processing.</p>
+        </div>
+    </div>
+</div>
+<script>
+    // Global variables
+    let array = [];
+    let initialArray = [];
+    let bars = [];
+    let isSorting = false;
+    let isPaused = false;
+    let shouldStop = false;
+
+    const visualization = document.getElementById('visualization');
+    const algorithmSelect = document.getElementById('algorithm-select');
+    const sizeRange = document.getElementById('size-range');
+    const speedRange = document.getElementById('speed-range');
+    const generateBtn = document.getElementById('generate-btn');
+    const startBtn = document.getElementById('start-btn');
+    const pauseBtn = document.getElementById('pause-btn');
+    const resetBtn = document.getElementById('reset-btn');
+
+    // Create and display array of bars
+    function generateArray() {
+        const size = parseInt(sizeRange.value);
+        array = [];
+        for (let i = 0; i < size; i++) {
+            // Values between 10 and 100 for height percentage
+            array.push(Math.floor(Math.random() * 91) + 10);
+        }
+        initialArray = array.slice(); // store a copy
+        renderArray(array);
+    }
+
+    function renderArray(arr) {
+        visualization.innerHTML = '';
+        bars = [];
+        for (let i = 0; i < arr.length; i++) {
+            const bar = document.createElement('div');
+            bar.classList.add('bar');
+            bar.style.height = arr[i] + '%';
+            visualization.appendChild(bar);
+            bars.push(bar);
+        }
+    }
+
+    // Utility sleep function (with pause check)
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function waitForMs(ms) {
+        // Wait with pause support
+        let t = 0;
+        while (t < ms) {
+            if (shouldStop) break;
+            if (!isPaused) {
+                await sleep(1);
+                t++;
+            } else {
+                await sleep(100);
+            }
+        }
+    }
+
+    function getDelay() {
+        // Delay in milliseconds
+        const speed = parseInt(speedRange.value);
+        // Map speed (1-100) to delay (around 5ms to 500ms)
+        const delay = (101 - speed) * 5;
+        return delay;
+    }
+
+    // Sorting algorithms (with visualization)
+
+    async function bubbleSort() {
+        isSorting = true;
+        const n = array.length;
+        for (let i = 0; i < n - 1; i++) {
+            for (let j = 0; j < n - i - 1; j++) {
+                if (shouldStop) {
+                    isSorting = false;
+                    return;
+                }
+                // Highlight the bars being compared
+                bars[j].classList.add('comparing');
+                bars[j + 1].classList.add('comparing');
+                await waitForMs(getDelay());
+                if (array[j] > array[j + 1]) {
+                    // Swap values
+                    [array[j], array[j + 1]] = [array[j + 1], array[j]];
+                    // Swap heights
+                    bars[j].style.height = array[j] + '%';
+                    bars[j + 1].style.height = array[j + 1] + '%';
+                    // Highlight swap
+                    bars[j].classList.remove('comparing');
+                    bars[j + 1].classList.remove('comparing');
+                    bars[j].classList.add('swapping');
+                    bars[j + 1].classList.add('swapping');
+                    await waitForMs(getDelay());
+                    bars[j].classList.remove('swapping');
+                    bars[j + 1].classList.remove('swapping');
+                }
+                // Remove highlight if no swap
+                bars[j].classList.remove('comparing');
+                bars[j + 1].classList.remove('comparing');
+            }
+            // Mark last element of this pass as sorted
+            bars[n - 1 - i].classList.add('sorted');
+        }
+        // Mark the first element as sorted at the end
+        bars[0].classList.add('sorted');
+        isSorting = false;
+    }
+
+    async function selectionSort() {
+        isSorting = true;
+        const n = array.length;
+        for (let i = 0; i < n - 1; i++) {
+            let minIndex = i;
+            // Highlight current position
+            bars[minIndex].classList.add('comparing');
+            for (let j = i + 1; j < n; j++) {
+                if (shouldStop) {
+                    isSorting = false;
+                    return;
+                }
+                // Highlight comparison
+                bars[j].classList.add('comparing');
+                await waitForMs(getDelay());
+                if (array[j] < array[minIndex]) {
+                    // Unhighlight previous minIndex if it's not i
+                    bars[minIndex].classList.remove('comparing');
+                    minIndex = j;
+                    // Highlight new minIndex
+                    bars[minIndex].classList.add('comparing');
+                }
+                bars[j].classList.remove('comparing');
+            }
+            // Swap if needed
+            if (minIndex !== i) {
+                [array[i], array[minIndex]] = [array[minIndex], array[i]];
+                bars[i].style.height = array[i] + '%';
+                bars[minIndex].style.height = array[minIndex] + '%';
+                // Highlight swap
+                bars[i].classList.add('swapping');
+                bars[minIndex].classList.add('swapping');
+                await waitForMs(getDelay());
+                bars[i].classList.remove('swapping');
+                bars[minIndex].classList.remove('swapping');
+            }
+            // Unhighlight i if still comparing (in case no swap)
+            bars[minIndex].classList.remove('comparing');
+            bars[i].classList.add('sorted');
+        }
+        // Mark last element sorted
+        bars[n - 1].classList.add('sorted');
+        isSorting = false;
+    }
+
+    async function insertionSort() {
+        isSorting = true;
+        const n = array.length;
+        bars[0].classList.add('sorted'); // first element is trivially sorted
+        for (let i = 1; i < n; i++) {
+            if (shouldStop) {
+                isSorting = false;
+                return;
+            }
+            let key = array[i];
+            let j = i - 1;
+            // Highlight key bar
+            bars[i].classList.add('comparing');
+            await waitForMs(getDelay());
+            while (j >= 0 && array[j] > key) {
+                // Shift element to the right
+                array[j + 1] = array[j];
+                bars[j + 1].style.height = array[j + 1] + '%';
+                // Highlight the shift
+                bars[j].classList.add('swapping');
+                await waitForMs(getDelay());
+                bars[j].classList.remove('swapping');
+                bars[j].classList.remove('comparing');
+                j--;
+            }
+            // Place key at correct position
+            array[j + 1] = key;
+            bars[j + 1].style.height = key + '%';
+            // Unhighlight key bar
+            bars[i].classList.remove('comparing');
+            // Mark sorted up to current index
+            for (let k = 0; k <= i; k++) {
+                bars[k].classList.add('sorted');
+            }
+        }
+        isSorting = false;
+    }
+
+    async function mergeSortUtil(l, r) {
+        if (l >= r) {
+            return;
+        }
+        const m = Math.floor((l + r) / 2);
+        await mergeSortUtil(l, m);
+        await mergeSortUtil(m + 1, r);
+        await merge(l, m, r);
+    }
+
+    async function merge(l, m, r) {
+        let n1 = m - l + 1;
+        let n2 = r - m;
+        // Copy arrays
+        let left = new Array(n1);
+        let right = new Array(n2);
+        for (let i = 0; i < n1; i++) {
+            left[i] = array[l + i];
+        }
+        for (let j = 0; j < n2; j++) {
+            right[j] = array[m + 1 + j];
+        }
+        // Merge back
+        let i = 0, j = 0, k = l;
+        while (i < n1 && j < n2) {
+            if (shouldStop) return;
+            // Highlight bars being compared
+            bars[l + i].classList.add('comparing');
+            bars[m + 1 + j].classList.add('comparing');
+            await waitForMs(getDelay());
+            if (left[i] <= right[j]) {
+                array[k] = left[i];
+                bars[k].style.height = left[i] + '%';
+                i++;
+            } else {
+                array[k] = right[j];
+                bars[k].style.height = right[j] + '%';
+                j++;
+            }
+            // Highlight placement
+            bars[k].classList.add('swapping');
+            await waitForMs(getDelay());
+            // Unhighlight
+            bars[l + i - 1 >= l ? (l + i - 1) : k].classList.remove('comparing');
+            bars[m + 1 + j - 1 >= m + 1 ? (m + 1 + j - 1) : k].classList.remove('comparing');
+            bars[k].classList.remove('swapping');
+            k++;
+        }
+        // Copy remaining elements
+        while (i < n1) {
+            if (shouldStop) return;
+            array[k] = left[i];
+            bars[k].style.height = left[i] + '%';
+            bars[k].classList.add('swapping');
+            await waitForMs(getDelay());
+            bars[k].classList.remove('swapping');
+            i++;
+            k++;
+        }
+        while (j < n2) {
+            if (shouldStop) return;
+            array[k] = right[j];
+            bars[k].style.height = right[j] + '%';
+            bars[k].classList.add('swapping');
+            await waitForMs(getDelay());
+            bars[k].classList.remove('swapping');
+            j++;
+            k++;
+        }
+    }
+
+    async function mergeSort() {
+        isSorting = true;
+        await mergeSortUtil(0, array.length - 1);
+        // After merge sort, mark all bars sorted
+        for (let bar of bars) {
+            bar.classList.add('sorted');
+        }
+        isSorting = false;
+    }
+
+    async function partition(l, r) {
+        const pivotValue = array[r];
+        bars[r].classList.add('pivot');
+        let i = l - 1;
+        for (let j = l; j < r; j++) {
+            if (shouldStop) return -1;
+            // Highlight compare
+            bars[j].classList.add('comparing');
+            await waitForMs(getDelay());
+            if (array[j] < pivotValue) {
+                i++;
+                [array[i], array[j]] = [array[j], array[i]];
+                bars[i].style.height = array[i] + '%';
+                bars[j].style.height = array[j] + '%';
+                bars[i].classList.add('swapping');
+                bars[j].classList.add('swapping');
+                await waitForMs(getDelay());
+                bars[i].classList.remove('swapping');
+                bars[j].classList.remove('swapping');
+            }
+            bars[j].classList.remove('comparing');
+        }
+        // Place pivot in correct position
+        [array[i + 1], array[r]] = [array[r], array[i + 1]];
+        bars[i + 1].style.height = array[i + 1] + '%';
+        bars[r].style.height = array[r] + '%';
+        bars[i + 1].classList.add('swapping');
+        bars[r].classList.add('swapping');
+        await waitForMs(getDelay());
+        bars[i + 1].classList.remove('swapping');
+        bars[r].classList.remove('swapping');
+        bars[r].classList.remove('pivot');
+        return i + 1;
+    }
+
+    async function quickSortUtil(low, high) {
+        if (low < high) {
+            const pi = await partition(low, high);
+            if (pi === -1) return; // stopped
+            await quickSortUtil(low, pi - 1);
+            await quickSortUtil(pi + 1, high);
+        }
+    }
+
+    async function quickSort() {
+        isSorting = true;
+        await quickSortUtil(0, array.length - 1);
+        // After quick sort, mark all bars sorted
+        for (let bar of bars) {
+            bar.classList.add('sorted');
+        }
+        isSorting = false;
+    }
+
+    async function heapifyAsync(n, i) {
+        let largest = i;
+        const left = 2 * i + 1;
+        const right = 2 * i + 2;
+        if (left < n && array[left] > array[largest]) {
+            largest = left;
+        }
+        if (right < n && array[right] > array[largest]) {
+            largest = right;
+        }
+        if (largest !== i) {
+            [array[i], array[largest]] = [array[largest], array[i]];
+            bars[i].style.height = array[i] + '%';
+            bars[largest].style.height = array[largest] + '%';
+            // Highlight swap
+            bars[i].classList.add('swapping');
+            bars[largest].classList.add('swapping');
+            await waitForMs(getDelay());
+            bars[i].classList.remove('swapping');
+            bars[largest].classList.remove('swapping');
+            await heapifyAsync(n, largest);
+        }
+    }
+
+    async function heapSort() {
+        isSorting = true;
+        const n = array.length;
+        // Build max heap
+        for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
+            if (shouldStop) {
+                isSorting = false;
+                return;
+            }
+            await heapifyAsync(n, i);
+        }
+        // Extract elements from heap
+        for (let i = n - 1; i > 0; i--) {
+            if (shouldStop) {
+                isSorting = false;
+                return;
+            }
+            [array[0], array[i]] = [array[i], array[0]];
+            bars[0].style.height = array[0] + '%';
+            bars[i].style.height = array[i] + '%';
+            bars[i].classList.add('sorted');
+            // Highlight swap
+            bars[0].classList.add('swapping');
+            bars[i].classList.add('swapping');
+            await waitForMs(getDelay());
+            bars[0].classList.remove('swapping');
+            bars[i].classList.remove('swapping');
+            await heapifyAsync(i, 0);
+        }
+        bars[0].classList.add('sorted');
+        isSorting = false;
+    }
+
+    async function countSort() {
+        isSorting = true;
+        const n = array.length;
+        if (n === 0) {
+            isSorting = false;
+            return;
+        }
+        let maxVal = Math.max(...array);
+        // Create count array
+        const count = new Array(maxVal + 1).fill(0);
+        // Count occurrences
+        for (let i = 0; i < n; i++) {
+            count[array[i]]++;
+        }
+        let index = 0;
+        // Build sorted array
+        for (let val = 0; val <= maxVal; val++) {
+            while (count[val] > 0) {
+                if (shouldStop) {
+                    isSorting = false;
+                    return;
+                }
+                array[index] = val;
+                bars[index].style.height = val + '%';
+                bars[index].classList.add('swapping');
+                await waitForMs(getDelay());
+                bars[index].classList.remove('swapping');
+                count[val]--;
+                index++;
+            }
+        }
+        // Mark all sorted
+        for (let bar of bars) {
+            bar.classList.add('sorted');
+        }
+        isSorting = false;
+    }
+
+    function resetArray() {
+        shouldStop = true;
+        isPaused = false;
+        setTimeout(() => {
+            // small timeout to ensure sorting loop checks shouldStop
+            array = initialArray.slice();
+            renderArray(array);
+            isSorting = false;
+            shouldStop = false;
+        }, 10);
+    }
+
+    // Event listeners
+    algorithmSelect.addEventListener('change', () => {
+        document.querySelectorAll('.algorithm-content').forEach(div => {
+            div.classList.remove('active');
+        });
+        const algo = algorithmSelect.value;
+        document.getElementById(algo).classList.add('active');
+    });
+
+    generateBtn.addEventListener('click', () => {
+        if (isSorting) { shouldStop = true; isSorting = false; }
+        generateArray();
+    });
+
+    startBtn.addEventListener('click', () => {
+        if (!isSorting) {
+            // Start sorting
+            shouldStop = false;
+            isPaused = false;
+            const algo = algorithmSelect.value;
+            switch (algo) {
+                case 'bubble':
+                    bubbleSort();
+                    break;
+                case 'selection':
+                    selectionSort();
+                    break;
+                case 'insertion':
+                    insertionSort();
+                    break;
+                case 'merge':
+                    mergeSort();
+                    break;
+                case 'quick':
+                    quickSort();
+                    break;
+                case 'heap':
+                    heapSort();
+                    break;
+                case 'count':
+                    countSort();
+                    break;
+            }
+        } else if (isPaused) {
+            // Resume sorting
+            isPaused = false;
+        }
+    });
+
+    pauseBtn.addEventListener('click', () => {
+        if (isSorting) {
+            isPaused = true;
+        }
+    });
+
+    resetBtn.addEventListener('click', () => {
+        resetArray();
+    });
+
+    // Initial setup
+    window.onload = () => {
+        generateArray();
+    };
+</script>
+</body>
+</html>
