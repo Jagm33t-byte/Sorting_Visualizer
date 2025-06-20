@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sorting Visualizer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Sorting Visualizer</h1>
+    </div>
+
+    <div class="control-panel">
+      <div class="left-panel">
+        <div class="control-group">
+          <label for="algo-select">Choose Algorithm:</label>
+          <select id="algo-select">
+            <option value="bubble">Bubble Sort</option>
+            <option value="selection">Selection Sort</option>
+            <option value="insertion">Insertion Sort</option>
+            <option value="merge">Merge Sort</option>
+            <option value="quick">Quick Sort</option>
+            <option value="heap">Heap Sort</option>
+            <option value="jump">Jump Sort</option>
+            <option value="count">Count Sort</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label for="size-slider">Size: <span id="size-value">50</span></label>
+          <input type="range" id="size-slider" min="2" max="25" value="12" />
+        </div>
+
+        <div class="control-group">
+          <label for="speed-slider">Speed: <span id="speed-value">50</span></label>
+          <input type="range" id="speed-slider" min="1" max="100" value="50" />
+        </div>
+
+        <div class="control-group">
+          <label for="custom-array">Custom Array (comma-separated):</label>
+          <input type="text" id="custom-array" placeholder="e.g., 5,3,8,1,2" />
+          <button id="use-custom">Use Custom Array</button>
+        </div>
+      </div>
+
+      <div class="right-panel">
+        <div class="control-group">
+          <button id="generate">Generate New Array</button>
+          <button id="start">Start Sorting</button>
+          <button id="pause">⏸ Pause</button>
+          <button id="reset">Reset</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Algorithm Description Section -->
+    <div id="algo-description" class="algo-description"></div>
+
+    <div class="visualization-container">
+      <div class="visualization-flex">
+        <div id="array-visualization">
+          <div id="index-row"></div>
+          <div id="value-row"></div>
+          <div id="original-array-label">Original Array:</div>
+          <div id="original-array-row"></div>
+        </div>
+        <pre id="algo-code" class="algo-code"></pre>
+      </div>
+    </div>
+
+    <div class="stats-panel">
+      <div class="stat-group">
+        <h3>Time Complexity</h3>
+        <p id="time">O(n²)</p>
+      </div>
+      <div class="stat-group">
+        <h3>Space Complexity</h3>
+        <p id="space">O(1)</p>
+      </div>
+      <div class="stat-group">
+        <h3>Comparisons</h3>
+        <p id="comparisons">0</p>
+      </div>
+      <div class="stat-group">
+        <h3>Swaps</h3>
+        <p id="swaps">0</p>
+      </div>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
